@@ -17,10 +17,12 @@ extensions.configure<com.android.build.api.dsl.ApplicationExtension> {
     }
 }
 
-extensions.configure<com.android.build.api.variant.AndroidComponentsExtension<*, *>> {
+extensions.configure<com.android.build.api.variant.ApplicationAndroidComponentsExtension> {
     onVariants(selector().withBuildType("release")) { variant ->
         variant.outputs.forEach { output ->
-            (output as? com.android.build.gradle.internal.api.ApkVariantOutputImpl)?.outputFileName = "rikkahub-nightly-${nightlyVersionCode}.apk"
+            if (output is com.android.build.gradle.internal.api.ApkVariantOutputImpl) {
+                output.outputFileName = "rikkahub-nightly-${nightlyVersionCode}.apk"
+            }
         }
     }
 }
