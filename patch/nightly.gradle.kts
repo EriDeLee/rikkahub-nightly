@@ -15,6 +15,12 @@ extensions.configure<com.android.build.api.dsl.ApplicationExtension> {
             signingConfig = signingConfigs.getByName("debug")
         }
     }
+
+    splits {
+        abi {
+            isEnable = false
+        }
+    }
 }
 
 extensions.configure<com.android.build.api.variant.ApplicationAndroidComponentsExtension> {
