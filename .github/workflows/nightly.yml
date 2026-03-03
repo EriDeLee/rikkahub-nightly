@@ -11,18 +11,19 @@ jobs:
 
     steps:
       - name: Checkout nightly config repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: nightly-config
 
       - name: Checkout main rikkahub repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           repository: ericleeaaaaa/rikkahub
+          ref: feat/drawer-state-refactor
           path: rikkahub
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'temurin'
           java-version: '17'
@@ -43,14 +44,12 @@ jobs:
           # Copy the dummy google-services.json for the nightly package name.
           cp nightly-config/patch/google-services.json rikkahub/app/google-services.json
 
-      - name: Make gradlew executable
-        run: chmod +x rikkahub/gradlew
-
       - name: Build Release APK
         env:
           GRADLE_OPTS: "-Xmx4g -Dkotlin.daemon.jvm.options=-Xmx3g"
         run: |
           cd rikkahub
+          chmod +x gradlew
           ./gradlew --no-daemon --parallel --build-cache assembleRelease
 
       - name: Generate timestamp
@@ -58,7 +57,10 @@ jobs:
         run: echo "BUILD_TIMESTAMP=$(date +%Y%m%d%H%M)" >> $GITHUB_ENV
 
       - name: Upload APK artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: ${{ env.BUILD_TIMESTAMP }}-nightly
           path: rikkahub/app/build/outputs/apk/release/*.apk
+          archive: false
+          if-no-files-found: error
+          retention-days: 1
