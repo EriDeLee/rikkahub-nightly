@@ -19,7 +19,7 @@ jobs:
         uses: actions/checkout@v6
         with:
           repository: ericleeaaaaa/rikkahub
-          ref: feat/drawer-state-refactor
+          ref: master
           path: rikkahub
 
       - name: Set up JDK 17
