@@ -1,4 +1,4 @@
-# RikkaHub Nightly Build
+# RikkaHub Patch Build
 
 **提示：**
 
